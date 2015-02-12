@@ -8,12 +8,12 @@
 //var URL_VTS_BASEMAP_SCALE_0_13 = 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer';
 //var URL_VTS_BASEMAP_SCALE_14_18 = 'http://arcgis.eocng.org/arcgis/rest/services/Basemaps/VTSBasemap/MapServer';
 
-/** Name of the parameter used to get application type 
-* supported appTypes listed in boot.js
-**/
-var PARAM_APP_TYPE    = "appType";
-var PARAM_EXTENT      = "extent";
-var PARAM_MAPSERVICE  = "mapservice";
+/** Name of the parameter used to get application type
+ * supported appTypes listed in boot.js
+ **/
+var PARAM_APP_TYPE = "appType";
+var PARAM_EXTENT = "extent";
+var PARAM_MAPSERVICE = "mapservice";
 var PARAM_QUERYLAYERS = "queryLayers";
 
 var IS_ONLINE = true;
@@ -51,27 +51,24 @@ var MAP_EXTENT = null;
 
 
 /** Print layouts **/
-var PRINT_LAYOUTS = [
-    {
-        "layout": "MAP_ONLY",
-        "label": "Image",
-        "format": "png32",
-        "exportOptions": {
-            "width": 1100,
-            "height": 800,
-            "dpi": 150
-        }
-    },
-    {
-        "layout": "A4_Landscape",
-        "label": "PDF",
-        "format": "pdf",
-        "options": {
-            "legendOptions": [],
-            "titleText": APP_TITLE        
-        }
-    }
-];
+var PRINT_LAYOUTS = [{
+  "layout": "MAP_ONLY",
+  "label": "Image",
+  "format": "png32",
+  "exportOptions": {
+    "width": 1100,
+    "height": 800,
+    "dpi": 150
+  }
+}, {
+  "layout": "A4_Landscape",
+  "label": "PDF",
+  "format": "pdf",
+  "options": {
+    "legendOptions": [],
+    "titleText": APP_TITLE
+  }
+}];
 
 
 /** Symbology used to highlight features **/
@@ -100,9 +97,9 @@ var LAYERS_EXTENT_TYPE_CODE = {};
 //----------------------------------------------------------------------------------
 //------------------   MODULES CONFIGURATION  --------------------------------------
 //----------------------------------------------------------------------------------
-var BASEMAP_MODULE   = true;
+var BASEMAP_MODULE = true;
 var WATERSHED_MODULE = false;
-var XY_MODULE        = false;
+var XY_MODULE = false;
 var PRINT_MODULE = true;
 var PANELINFO_MODULE = true;
 var GOTO_MODULE = true;

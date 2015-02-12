@@ -1,0 +1,127 @@
+/**
+ * Main application's entry point.
+ * @namespace novelt.mapClient.esri
+ */
+(function(mapClient) {
+  'use strict';
+  /* globals dojo, require, esri */
+
+  /**
+   * The application starts when the DOM has finished loading an is ready to be manipulated.
+   */
+  dojo.ready(onDomReady);
+
+  ////////////////
+
+  function onDomReady() {
+    require([
+      "modules/_ModuleManager",
+      'dojo/_base/declare',
+    ], function(ModuleManager) {
+
+      mapClient.config.init();
+      mapClient.params.extractUrlParams();
+      mapClient.moduleManager = new ModuleManager();
+
+      //YMI: Declare a custom TiledMapServiceLayer to read local TPK
+      dojo.declare("my.LocalTiledMapServiceLayer", esri.layers.TiledMapServiceLayer, {
+        constructor: function(myWkid, xmin, ymin, xmax, ymax, rows, cols, dpi, format, compressQuality, xorigin, yorigin, lods) {
+          this.spatialReference = new esri.SpatialReference({
+            wkid: myWkid
+          });
+
+          this.initialExtent = (this.fullExtent = new esri.geometry.Extent(xmin, ymin, xmax, ymax, this.spatialReference));
+
+          this.tileInfo = new esri.layers.TileInfo({
+            "rows": rows,
+            "cols": cols,
+            "dpi": dpi,
+            "format": format,
+            "compressionQuality": compressQuality,
+            "origin": {
+              "x": xorigin,
+              "y": yorigin
+            },
+            "spatialReference": {
+              "wkid": myWkid
+            },
+            "lods": lods
+          });
+
+          this.loaded = true;
+          this.onLoad(this);
+        },
+
+        getTileUrl: function(level, row, col) {
+          return "Handlers/TPKServer/getTile.ashx?level=" + level + "&row=" + row + "&col=" + col;
+        }
+      });
+
+
+      loadFiles(onApplicationReady);
+    });
+  }
+
+  function loadFiles(callback) {
+    var appType = mapClient.urlParams[PARAM_APP_TYPE];
+
+    var scripts = [];
+    var styles = [];
+
+    // Load app speficic scripts and css
+    switch (appType) {
+      case "basic":
+        //do nothing, just init the application
+        break;
+      case "VTS":
+        scripts = path_to_VTS_js;
+        break;
+      case "CMSL":
+        scripts = path_to_CMSL_js;
+        styles = path_to_CMSL_css;
+        break;
+      case "HealthCamp":
+        scripts = path_to_HealthCamp_js;
+        styles = path_to_HealthCamp_css;
+        break;
+      case "VTSOFFLINE":
+        scripts = path_to_VTS_OFFLINE_js;
+        styles = path_to_VTSOffline_css;
+        break;
+      case "VTS_NonVaccination":
+        scripts = path_to_VTS_NonVaccination_js;
+        break;
+      case "Supervisor":
+        scripts = path_to_Supervisor_js;
+        styles = path_to_HealthCamp_css;
+        break;
+      case "Dashboard":
+        scripts = path_to_Dashboard_js;
+        styles = path_to_Dashboard_css;
+        break;
+      case "EnvironmentalSites":
+        scripts = path_to_EnvironmentalSites_js;
+        break;
+      case "Plain":
+        scripts = path_to_Plain_js;
+        styles = path_to_Plain_css;
+        break;
+      default:
+        console.log("appType: " + appType + " not supported!");
+        break;
+    }
+
+    mapClient.loadFiles.load(scripts, styles, callback);
+  }
+
+  function onApplicationReady() {
+    if (!IS_ONLINE) {
+      esriConfig.defaults.io.proxyUrl = URL_PROXY;
+      esriConfig.defaults.io.alwaysUseProxy = true;
+    }
+
+    Application.initialize();
+  }
+
+
+})(window.mapClient = window.mapClient || {});
