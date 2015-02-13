@@ -43,7 +43,7 @@ Application_Dashboard = {
         });
 
         //send query
-        Application.dynamicLayer.setLayerDefinitions(filter);
+        mapClient.layers.dynamicLayer.setLayerDefinitions(filter);
 
         var $element = $(element);
 
@@ -163,7 +163,7 @@ Application_Dashboard = {
     *   Startup function, used to connect to Events
     **/
     startup: function() {
-        Application.ignoreAddMap = true;
+        mapClient.map.ignoreAddMap = true;
 
         var self = Application_Dashboard;
 
@@ -321,11 +321,11 @@ Application_Dashboard = {
 
         if (IDENTIFY_TOLERANCE && IDENTIFY_INFOTEMPLATES && IDENTIFY_INFOTEMPLATES.length > 0) {
             //create identify tasks and setup parameters
-            var identifyTask = new esri.tasks.IdentifyTask(app.mapServiceURL);
+            var identifyTask = new esri.tasks.IdentifyTask(mapClient.services.mapServiceURL);
 
             var queryTheseLayers = [];
             for (var i = 0; i < IDENTIFY_QUERYABLE_LAYERS.length; i++) {
-                if (app.visible.indexOf(IDENTIFY_QUERYABLE_LAYERS[i].toString()) !== -1) {
+                if (mapClient.layers.visible.indexOf(IDENTIFY_QUERYABLE_LAYERS[i].toString()) !== -1) {
                     queryTheseLayers.push(IDENTIFY_QUERYABLE_LAYERS[i]);
                 }
             }
@@ -337,12 +337,14 @@ Application_Dashboard = {
             identifyParams.layerIds = queryTheseLayers;
             identifyParams.layerDefinitions = [];
 
-            if (app.dynamicLayer.layerDefinitions && app.dynamicLayer.layerDefinitions.length > 0) {
+            var dynamicLayer = mapClient.layers.dynamicLayer;
+
+            if (dynamicLayer.layerDefinitions && dynamicLayer.layerDefinitions.length > 0) {
                 var layerDefs = [];
                 for (var i = 0; i < IDENTIFY_QUERYABLE_LAYERS.length; i++) {
                     var identifyableLayerId = IDENTIFY_QUERYABLE_LAYERS[i];
-                    if (app.dynamicLayer.layerDefinitions[identifyableLayerId] && app.dynamicLayer.layerDefinitions[identifyableLayerId].length > 0) {
-                        layerDefs[identifyableLayerId] = app.dynamicLayer.layerDefinitions[identifyableLayerId];
+                    if (dynamicLayer.layerDefinitions[identifyableLayerId] && dynamicLayer.layerDefinitions[identifyableLayerId].length > 0) {
+                        layerDefs[identifyableLayerId] = dynamicLayer.layerDefinitions[identifyableLayerId];
                     }
                 }
                 identifyParams.layerDefinitions = layerDefs;
@@ -431,7 +433,7 @@ Application_Dashboard = {
     initialize: function() {
         var self = Application_Dashboard;
 
-        Application.mapServiceURL = URL_VTS_AGS + URL_SERVICE_BASE + "/MapServer";
+        mapClient.services.mapServiceURL = URL_VTS_AGS + URL_SERVICE_BASE + "/MapServer";
 
         self.processURLParams();
 
@@ -501,7 +503,7 @@ Application_Dashboard = {
         var queryField = configLayersExtentTypeCode.field;
         var outFields = configLayersExtentTypeCode.outFields;
 
-        var queryTask = new esri.tasks.QueryTask(Application.mapServiceURL + "/" + layerId);
+        var queryTask = new esri.tasks.QueryTask(mapClient.services.mapServiceURL + "/" + layerId);
         var query = new esri.tasks.Query();
         query.where = queryField + " = '" + layerCode + "'";
         query.outFields = [outFields];
@@ -537,7 +539,7 @@ Application_Dashboard = {
             return;
         }
 
-        var queryTask = new esri.tasks.QueryTask(Application.mapServiceURL + "/" + 0);
+        var queryTask = new esri.tasks.QueryTask(mapClient.services.mapServiceURL + "/" + 0);
         var query = new esri.tasks.Query();
         query.where = "NIGERIA.DBO.FC_ND_Case.CaseId='\{" + caseId + "\}'";
         query.outFields = ['NIGERIA.DBO.FC_ND_Case.OBJECTID'];
@@ -562,7 +564,7 @@ Application_Dashboard = {
             var outFields = configLayersExtentTypeCode.outFields;
 
             // Set the query
-            var queryTask = new esri.tasks.QueryTask(Application.mapServiceURL + "/" + layerId);
+            var queryTask = new esri.tasks.QueryTask(mapClient.services.mapServiceURL + "/" + layerId);
             var query = new esri.tasks.Query();
             query.where = queryField + " = '" + layerCode + "'";
             query.outFields = [outFields];

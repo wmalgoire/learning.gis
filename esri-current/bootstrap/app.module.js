@@ -3,6 +3,8 @@
  * @namespace novelt
  */
 (function(namespace) {
+  'use strict';
+  /* globals require */
 
   namespace.extend = extend;
 
@@ -25,10 +27,21 @@
   }
 
   extend(namespace, "mapClient.core");
-  extend(namespace, "mapClient.core.config");
-  extend(namespace, "mapClient.core.ui");
-  extend(namespace, "mapClient.esri.map");
-  extend(namespace, "utils");
+  extend(namespace, "mapClient.esri");
+  extend(namespace, "mapClient.utils");
+
+  //var locationPath = location.pathname.replace(new RegExp(/\/[^\/]+$/), '');
+
+  // require({
+  //   async: false,
+  //   paths: {
+  //     'widgets': '/Scripts/app/map/core/widgets'
+  //   }
+  //   // packages: [{
+  //   //   name: 'widgets',
+  //   //   location: '/Scripts/app/map/core/widgets'
+  //   // }]
+  // });
 
 })(window.novelt = window.novelt || {});
 
@@ -36,4 +49,3 @@
 
 // define shorter alias
 var mapClient = window.novelt.mapClient;
-var utils = window.novelt.utils;

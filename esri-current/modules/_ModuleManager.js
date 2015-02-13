@@ -1,19 +1,10 @@
-/**
- * Date: 03.12.2014
- * Author: YM
- * Class: _ModuleManager
- *
- * This class is used as a manager for the modules
- */
-(function() {
+(function(mapClient, config, events) {
   'use strict';
-  /* globals define, require */
+  /* globals require, define */
 
   define([
     "dojo/_base/declare"
-  ], moduleManager);
-
-  function moduleManager(declare) {
+  ], function(declare) {
 
     return declare(null, {
       map: null,
@@ -26,16 +17,16 @@
       constructor: function() {
         var _this = this;
 
-        if (USE_SECURE_SERVICES) {
+        if (window.USE_SECURE_SERVICES) {
           this.loadTokenHelperModule();
         }
 
-        Event.connect(Event.MAP_LOADED, function(map) {
+        events.connect(events.MAP.LOADED, function(map) {
           _this.map = map;
           _this.addModulesIfReady();
         });
 
-        Event.connect(Event.DYNAMICLAYER_LOADED, function(dynamicLayer) {
+        events.connect(events.MAP.DYNAMICLAYER_LOADED, function(dynamicLayer) {
           _this.dynamicLayer = dynamicLayer;
           _this.addModulesIfReady();
         });
@@ -46,35 +37,35 @@
        **/
       addModulesIfReady: function() {
         if (this.map !== null && this.dynamicLayer !== null) {
-          if (WATERSHED_MODULE) {
+          if (config.MODULES.WATERSHED) {
             this.loadWatershedModule();
           }
 
-          if (XY_MODULE) {
+          if (config.MODULES.XY) {
             this.loadXYModule();
           }
 
-          if (BASEMAP_MODULE) {
+          if (config.MODULES.BASEMAP) {
             this.loadBasemapModule();
           }
 
-          if (PRINT_MODULE) {
+          if (config.MODULES.PRINT) {
             this.loadPrintModule();
           }
 
-          if (PANELINFO_MODULE) {
+          if (config.MODULES.PANELINFO) {
             this.loadPanelInfoModule();
           }
 
-          if (GOTO_MODULE) {
+          if (config.MODULES.GOTO) {
             this.loadGoToModule();
           }
 
-          if (HIGHLIGHTSELECTION_MODULE) {
+          if (config.MODULES.HIGHLIGHTSELECTION) {
             this.loadHighlightSelectionModule();
           }
 
-          if (CAMPAIGNBROWSER_MODULE) {
+          if (config.MODULES.CAMPAIGNBROWSER) {
             this.loadCampaignBrowserModule();
           }
 
@@ -181,5 +172,7 @@
       }
 
     });
-  }
-})();
+  });
+
+
+})(window.mapClient, window.mapClient.config, window.mapClient.events);

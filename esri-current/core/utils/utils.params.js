@@ -1,11 +1,9 @@
-(function(mapClient) {
+(function(utils) {
   'use strict';
 
-  mapClient.params = {
+  utils.params = {
     extractUrlParams: extractUrlParams
   };
-
-  mapClient.urlParams = [];
 
   ////////////////
 
@@ -22,9 +20,7 @@
     }
 
     //todo send event
-    mapClient.urlParams = params;
-    Application.setExtent(params);
     return params;
   }
 
-})(window.mapClient = window.mapClient || {});
+})(window.mapClient.utils);

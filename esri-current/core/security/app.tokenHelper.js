@@ -9,8 +9,7 @@
   ////////////////
 
   function testTokenNeeded() {
-    var mapServiceUrl = mapClient.application.mapServiceURL;
-    var tokenLayer = new esri.layers.ArcGISDynamicMapServiceLayer(mapServiceUrl);
+    var tokenLayer = new esri.layers.ArcGISDynamicMapServiceLayer(mapClient.services.mapServiceURL);
 
     dojo.connect(tokenLayer, "onLoad", function(layer) {
       console.info("$$$ layer: " + layer.url + " no token required");

@@ -1,4 +1,4 @@
-(function(mapClient) {
+(function(mapClient, events) {
   'use strict';
   /* globals require */
 
@@ -49,8 +49,8 @@
         }
       }
 
-      Event.trigger(Event.TAB_SELECTED_CHANGE, index);
+      events.trigger(events.UI.TAB_SELECTED_CHANGE, index);
     }
   }
 
-})(window.mapClient = window.mapClient || {});
+})(window.mapClient, window.mapClient.events);

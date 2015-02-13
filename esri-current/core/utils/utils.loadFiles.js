@@ -1,4 +1,4 @@
-(function(mapClient) {
+(function(utils) {
   'use strict';
 
   // private variables
@@ -7,7 +7,7 @@
   var _callback;
 
   // public methods
-  mapClient.loadFiles = {
+  utils.loadFiles = {
     load: load,
   };
 
@@ -17,6 +17,11 @@
     _scripts = _scripts.concat(scripts);
     _styles = _styles.concat(styles);
     _callback = callback;
+
+    if ((_scripts.length === 0) && (_styles.length === 0)) {
+      _callback();
+      return;
+    }
 
     while (_scripts.length > 0) {
       var script = _scripts.shift();
@@ -157,4 +162,4 @@
 
   //   });
 
-})(window.mapClient = window.mapClient || {});
+})(window.mapClient.utils);

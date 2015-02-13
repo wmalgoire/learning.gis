@@ -18,7 +18,7 @@ Application_HealthCamp = {
     *   Startup function, used to connect to Events
     **/
     startup: function () {
-        Application.ignoreAddMap = true;
+        mapClient.map.ignoreAddMap = true;
 
         var self = Application_HealthCamp;
 
@@ -52,7 +52,7 @@ Application_HealthCamp = {
             return;
         }
 
-        var queryTask = new esri.tasks.QueryTask(Application.mapServiceURL + "/" + LAYER_FOR_DAYS);
+        var queryTask = new esri.tasks.QueryTask(mapClient.services.mapServiceURL + "/" + LAYER_FOR_DAYS);
         var query = new esri.tasks.Query();
         query.where = "1=1";
         query.outFields = ['CampaignDay'];
@@ -95,7 +95,7 @@ Application_HealthCamp = {
                         filter[CAMPAIGN_DAY_LAYERS[j]] = 'CampaignDay = ' + newDay;
                     }
 
-                    Application.dynamicLayer.setLayerDefinitions(filter);
+                    mapClient.layers.dynamicLayer.setLayerDefinitions(filter);
                 });
             }
 
@@ -116,12 +116,12 @@ Application_HealthCamp = {
         if (self.urlParams.campaignId && self.urlParams.day) {
 
             //if we have the parameters, set the service url
-            Application.mapServiceURL = URL_VTS_AGS + URL_SERVICE_BASE + self.urlParams.campaignId + "/MapServer";
+            mapClient.services.mapServiceURL = URL_VTS_AGS + URL_SERVICE_BASE + self.urlParams.campaignId + "/MapServer";
 
             Map.addMap(null);
         }
         else if (self.urlParams.campaignId) {
-            Application.mapServiceURL = URL_VTS_AGS + URL_SERVICE_BASE + self.urlParams.campaignId + "_CrossDays/MapServer";
+            mapClient.services.mapServiceURL = URL_VTS_AGS + URL_SERVICE_BASE + self.urlParams.campaignId + "_CrossDays/MapServer";
             Map.addMap(null);
         }
         else {

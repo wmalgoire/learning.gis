@@ -5,13 +5,9 @@
  *
  * This class is used as a baseClass for the different module widgets
  */
-define([
-    "dojo/_base/declare",
-    "dojo/dom-construct",
-    "dojo/on"
-  ],
+define(["dojo/_base/declare"],
 
-  function(declare, domConstruct, on) {
+  function(declare) {
 
     return declare(null, {
       map: null,
@@ -40,7 +36,6 @@ define([
         } else {
           this.initialize();
         }
-
       },
 
       /**

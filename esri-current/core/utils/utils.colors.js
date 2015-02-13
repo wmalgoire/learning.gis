@@ -1,8 +1,8 @@
-(function(mapClient) {
+(function(utils) {
   'use strict';
 
   // public methods
-  mapClient.colors = {
+  utils.colors = {
     rgbToHex: rgbToHex
   };
 
@@ -17,4 +17,4 @@
     return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
   }
 
-})(window.mapClient = window.mapClient || {});
+})(window.mapClient.utils);

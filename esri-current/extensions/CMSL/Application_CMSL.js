@@ -18,7 +18,7 @@ Application_CMSL = {
     *   Startup function, used to connect to Events
     **/
     startup: function () {
-        Application.ignoreAddMap = true;
+        mapClient.map.ignoreAddMap = true;
 
         var self = Application_CMSL;
 
@@ -52,7 +52,7 @@ Application_CMSL = {
         // Missing parameters
         else {
             // Display default map
-            Map.addMap(null);
+            mapClient.map.map.addMap(null);
 
             var alertMsg = "2 parameters expected!" +
                 "\n" +

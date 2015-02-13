@@ -281,7 +281,7 @@
   }
 
   function zoomToExtent(layerType, layerCode, highlightFeature, callback) {
-    if (config.LAYERS_EXTENT_TYPE_CODE[layerType]) {
+    if (LAYERS_EXTENT_TYPE_CODE[layerType]) {
       var configLayersExtentTypeCode = config.LAYERS_EXTENT_TYPE_CODE[layerType];
       var layerId = configLayersExtentTypeCode.id;
       var queryField = configLayersExtentTypeCode.field;
@@ -306,7 +306,7 @@
   }
 
   function zoomToExtentUsingSearchField(layerType, layerCode, highlightFeature, callback) {
-    if (config.LAYERS_EXTENT_TYPE_CODE[layerType]) {
+    if (LAYERS_EXTENT_TYPE_CODE[layerType]) {
       var configLayersExtentTypeCode = config.LAYERS_EXTENT_TYPE_CODE[layerType];
       var layerId = configLayersExtentTypeCode.id;
       var queryField = configLayersExtentTypeCode.searchField;
@@ -334,7 +334,7 @@
       forceShowLayer = true;
     }
     // Get params from config
-    if (config.LAYERS_EXTENT_TYPE_CODE[layerType]) {
+    if (LAYERS_EXTENT_TYPE_CODE[layerType]) {
       var configLayersExtentTypeCode = config.LAYERS_EXTENT_TYPE_CODE[layerType];
 
       var layerId = configLayersExtentTypeCode.id;

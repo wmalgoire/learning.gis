@@ -25,7 +25,7 @@ IDENTIFY_INFOTEMPLATES[4] = {
 
         if (data.feature.attributes.IsInWorkingPeriod == 0)
             ret += "<strong>Not in working period</strong><br/>";
-        
+
         if (data.feature.attributes.IsWithinDates == 0)
             ret += "<strong>Not within campaign dates</strong><br/>";
 
@@ -57,11 +57,11 @@ IDENTIFY_INFOTEMPLATES[15] = {
 // ==========================================================================================
 
 /** URL parameters **/
-var PARAM_LAYER_TYPE = "layerType";
-var PARAM_LAYER_CODE = "layerCode";
-var PARAM_DAY = "day";
-var PARAM_TRACK_CUMULATIVE = "trackCumulative";
-var PARAM_CAMPAIGN_ID = "campaignId";
+PARAM_LAYER_TYPE = "layerType";
+PARAM_LAYER_CODE = "layerCode";
+PARAM_DAY = "day";
+PARAM_TRACK_CUMULATIVE = "trackCumulative";
+PARAM_CAMPAIGN_ID = "campaignId";
 
 
 LAYERS_VISIBLE = [0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 15, 16, 17];
@@ -131,7 +131,7 @@ var LAYERS_DENOMINATOR_TYPE_CODE = {
     }
 };
 
-var LAYERS_ADDITIONAL_FILTERS = {    
+var LAYERS_ADDITIONAL_FILTERS = {
   "ValidatedAsNotMissed" : {
     "id": 0,
     "campaignField": "CampaignID"

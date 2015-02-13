@@ -1,6 +1,6 @@
 /**
 * Class: Main VTS application.
-* 
+*
 * This module declares a singleton object, that is intended to be used
 * directly.
 */
@@ -10,7 +10,7 @@ Application_EnvironmentalSites = {
     *   Startup function, used to connect to Events
     **/
     startup: function () {
-        Application.ignoreAddMap = true;
+        mapClient.map.ignoreAddMap = true;
 
         var self = Application_EnvironmentalSites;
 
@@ -31,10 +31,10 @@ Application_EnvironmentalSites = {
         Map.addMap(null);
         //self.processURLParams();
 
-        
+
     },
 
-    
+
 
 };
 

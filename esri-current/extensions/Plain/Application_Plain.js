@@ -1,31 +1,29 @@
-Application_Plain = {
-    
+(function(mapClient, events) {
+  'use strict';
+  /* globals esri */
+
+  var mapExtension = {
     urlParams: {
-        params: [],
-        layerType: false,
-        layerCode: false
-    },
+      params: [],
+      layerType: false,
+      layerCode: false
+    }
+  };
 
-    startup: function () {
-        Application.ignoreAddMap = true;
+  bindEvents();
 
-        var self = Application_Plain;
+  ////////////////
 
-        Event.connect(Event.APP_INITIALIZED, function (data) {
-            self.initialize();
-        });
+  function bindEvents() {
+    events.connect(events.APP.INITIALIZED, function() {
+      //mapExtension.initialize();
+    });
 
-        Event.connect(Event.MAP_INIT, function (map) {
-            var imageParameters = new esri.layers.ImageParameters();
-            imageParameters.format = "PNG32";
-            Map.imageParameters = imageParameters;
-        });
-    },
+    events.connect(events.MAP.INITIALIZED, function() {
+      var imageParameters = new esri.layers.ImageParameters();
+      imageParameters.format = "PNG32";
+      mapClient.map.imageParameters = imageParameters;
+    });
+  }
 
-    initialize: function () {
-        Map.addMap(null);
-    },
-
-};
-
-Application_Plain.startup();
+})(window.mapClient, window.mapClient.events);

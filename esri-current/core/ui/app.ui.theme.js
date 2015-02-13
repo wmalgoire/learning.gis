@@ -2,7 +2,7 @@
   'use strict';
   /* globals dojo */
 
-  mapClient.ui.loading = {
+  mapClient.ui.theme = {
     init: init,
     updateColor: updateColor
   };
