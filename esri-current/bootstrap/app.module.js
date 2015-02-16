@@ -2,11 +2,16 @@
  * Define namespaces. Should be loaded first.
  * @namespace novelt
  */
+
 (function(namespace) {
   'use strict';
   /* globals require */
 
   namespace.extend = extend;
+
+  extend(namespace, "mapClient.core");
+  extend(namespace, "mapClient.esri");
+  extend(namespace, "mapClient.utils");
 
   // parsing string and automatically generating nested namespaces
   function extend(ns, ns_string) {
@@ -25,23 +30,6 @@
 
     return parent;
   }
-
-  extend(namespace, "mapClient.core");
-  extend(namespace, "mapClient.esri");
-  extend(namespace, "mapClient.utils");
-
-  //var locationPath = location.pathname.replace(new RegExp(/\/[^\/]+$/), '');
-
-  // require({
-  //   async: false,
-  //   paths: {
-  //     'widgets': '/Scripts/app/map/core/widgets'
-  //   }
-  //   // packages: [{
-  //   //   name: 'widgets',
-  //   //   location: '/Scripts/app/map/core/widgets'
-  //   // }]
-  // });
 
 })(window.novelt = window.novelt || {});
 

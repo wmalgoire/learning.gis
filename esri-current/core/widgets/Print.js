@@ -6,7 +6,7 @@
 * This class is used to print the map
 */
 define(
-  ["dojo/_base/declare", "modules/_BaseWidget",
+  ["dojo/_base/declare", "widgets/_BaseWidget",
       "esri/dijit/Print", "esri/tasks/PrintTemplate",
   "esri/tasks/LegendLayer"],
 

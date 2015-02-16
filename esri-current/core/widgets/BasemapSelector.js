@@ -1,6 +1,6 @@
 define([
   "dojo/_base/declare",
-  "modules/_BaseWidget",
+  "widgets/_BaseWidget",
   "dojo/dom",
   "dojo/dom-style",
   "dojo/dom-class",

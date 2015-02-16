@@ -6,7 +6,7 @@
 * This class is used to navigate to a given X,Y
 */
 define(
-  ["dojo/_base/declare", "modules/_BaseWidget",
+  ["dojo/_base/declare", "widgets/_BaseWidget",
   "esri/geometry/webMercatorUtils",
   "esri/SpatialReference",
   "esri/geometry/Point",

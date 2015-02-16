@@ -6,7 +6,7 @@
 * This class is used to generate watershed for given points
 */
 define(
-  ["dojo/_base/declare", "modules/_BaseWidget",
+  ["dojo/_base/declare", "widgets/_BaseWidget",
   "esri/geometry/webMercatorUtils",
   "esri/graphic",
   "esri/graphicsUtils",

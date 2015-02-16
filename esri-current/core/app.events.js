@@ -13,6 +13,10 @@
        */
       INITIALIZED: "appInitialized",
       /**
+       * Event sent when the app is ready
+       */
+      READY: "appReady",
+      /**
        * Event sent when the token is ready
        **/
       TOKEN_READY: "tokenReady"

@@ -6,7 +6,7 @@
 * This class is used to let the user search for a place and zoom to this place
 */
 define(
-  ["dojo/_base/declare", "modules/_BaseWidget"],
+  ["dojo/_base/declare", "widgets/_BaseWidget"],
 
   function (declare, BaseWidget) {
 

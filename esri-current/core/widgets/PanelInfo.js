@@ -6,7 +6,7 @@
 * This class is used to display footer information
 */
 define(
-  ["dojo/_base/declare", "modules/_BaseWidget",
+  ["dojo/_base/declare", "widgets/_BaseWidget",
   "dojo/on",
   "esri/geometry/webMercatorUtils"],
 

@@ -1,18 +1,11 @@
 (function(mapClient, config, events) {
   'use strict';
   /* globals require, dojo, esri */
-
-  // private properties
-  var layersExtentTypeCode = config.LAYERS.EXTENT_TYPE_CODE;
-  var layersVisible = config.LAYERS.VISIBLE;
-  var mapExtent = config.MAP.EXTENT;
-  var isOnline = config.IS_ONLINE;
-
-  var esriMap;
+  mapClient.esriMap = null;
 
   // public properties
   mapClient.map = {
-    map: esriMap,
+    map: mapClient.esriMap,
     imageParameters: null,
     initialFeatureSet: null,
     mapClickHandle: null,
@@ -63,13 +56,7 @@
   ////////////////
 
   function startup() {
-    events.connect(events.APP.INITIALIZED, function() {
-      // update from extension config
-      layersExtentTypeCode = config.LAYERS.EXTENT_TYPE_CODE;
-      layersVisible = config.LAYERS.VISIBLE;
-      mapExtent = config.MAP.EXTENT;
-      isOnline = config.IS_ONLINE;
-    });
+    events.connect(events.APP.INITIALIZED, function() {});
   }
 
   /**
@@ -81,16 +68,16 @@
       forceShowLayer = true;
     }
     // Get params from config
-    if (layersExtentTypeCode[layerType]) {
-      var configLayersExtentTypeCode = layersExtentTypeCode[layerType];
+    if (config.LAYERS.EXTENT_TYPE_CODE[layerType]) {
+      var layer = config.LAYERS.EXTENT_TYPE_CODE[layerType];
 
-      var layerId = configLayersExtentTypeCode.id;
-      var queryField = configLayersExtentTypeCode.field;
-      var outFields = configLayersExtentTypeCode.outFields;
+      var layerId = layer.id;
+      var queryField = layers.field;
+      var outFields = layer.outFields;
 
       // Set the current layer visible (if not already)
-      if (forceShowLayer && dojo.indexOf(layersVisible, layerId) === -1) {
-        layersVisible.push(layerId);
+      if (forceShowLayer && dojo.indexOf(config.LAYERS.VISIBLE, layerId) === -1) {
+        config.LAYERS.VISIBLE.push(layerId);
       }
 
       // Set the query
@@ -110,7 +97,7 @@
   }
 
   function addMap(featureSet) {
-    console.log("addmap", featureSet);
+    console.log("addmap", featureSet, config.MAP.EXTENT);
     var extent = null;
 
     if (featureSet) {
@@ -124,28 +111,27 @@
       }
     } else {
       // Else use default center and zoom
-      if (!mapExtent)
+      if (!config.MAP.EXTENT)
         extent = null;
       else
         extent = new esri.geometry.Extent(
-          mapExtent.xmin,
-          mapExtent.ymin,
-          mapExtent.xmax,
-          mapExtent.ymax,
+          config.MAP.EXTENT.xmin,
+          config.MAP.EXTENT.ymin,
+          config.MAP.EXTENT.xmax,
+          config.MAP.EXTENT.ymax,
           new esri.SpatialReference({
             wkid: 4326
           })
         );
     }
-    console.log("addmap extent", extent);
 
     // Create map
     var basemapDefault = null;
-    if (isOnline) {
+    if (config.IS_ONLINE) {
       basemapDefault = "satellite";
     }
 
-    esriMap = new esri.Map(
+    mapClient.esriMap = new esri.Map(
       "map", {
         extent: extent,
         logo: false,
@@ -153,23 +139,23 @@
       }
     );
 
-    dojo.connect(esriMap, "onLoad", function() {
-      events.trigger(events.MAP.LOADED, esriMap);
+    dojo.connect(mapClient.esriMap, "onLoad", function() {
+      events.trigger(events.MAP.LOADED, mapClient.esriMap);
     });
 
-    // mapClient.map.addListeners();
+    mapClient.map.addListeners();
 
-    // events.trigger(events.MAP.INITIALIZED, esriMap);
+    events.trigger(events.MAP.INITIALIZED, mapClient.esriMap);
 
-    // if (mapClient.map.imageParameters === null) {
-    //   mapClient.map.imageParameters = new esri.layers.ImageParameters();
-    //   mapClient.map.imageParameters.format = "PNG32";
-    // }
+    if (mapClient.map.imageParameters === null) {
+      mapClient.map.imageParameters = new esri.layers.ImageParameters();
+      mapClient.map.imageParameters.format = "PNG32";
+    }
 
-    // addDynamicLayer(extent);
+    addDynamicLayer(extent);
     // initDijits();
 
-    // if (!isOnline) {
+    // if (!config.IS_ONLINE) {
     //   mapClient.map.getTilingScheme();
     // } else {
     //   mapClient.map.addOperationalLayers(featureSet);
@@ -178,7 +164,7 @@
 
   function addDynamicLayer(extent) {
     console.log("addDynamicLayer", extent);
-    require(["modules/CustomArcGISDynamicLayer"],
+    require(["widgets/CustomArcGISDynamicLayer"],
       function(CustomArcGISDynamicLayer) {
         var dynamicLayer = new CustomArcGISDynamicLayer(
           mapClient.services.mapServiceURL, {
@@ -202,16 +188,16 @@
       forceShowLayer = true;
     }
     // Get params from config
-    if (layersExtentTypeCode[layerType]) {
-      var configLayersExtentTypeCode = layersExtentTypeCode[layerType];
+    if (config.LAYERS.EXTENT_TYPE_CODE[layerType]) {
+      var layer = config.LAYERS.EXTENT_TYPE_CODE[layerType];
 
-      var layerId = configLayersExtentTypeCode.id;
-      var queryField = configLayersExtentTypeCode.field;
-      var outFields = configLayersExtentTypeCode.outFields;
+      var layerId = layer.id;
+      var queryField = layer.field;
+      var outFields = layer.outFields;
 
       // Set the current layer visible (if not already)
-      if (forceShowLayer && dojo.indexOf(layersVisible, layerId) === -1) {
-        config.layersVisible.push(layerId);
+      if (forceShowLayer && dojo.indexOf(config.LAYERS.VISIBLE, layerId) === -1) {
+        config.config.LAYERS.VISIBLE.push(layerId);
       }
 
       // Set the query
@@ -244,7 +230,7 @@
       });
     }
 
-    esriMap.addLayers([
+    mapClient.esriMap.addLayers([
       dynamicLayer
     ]);
 
@@ -277,7 +263,7 @@
             mapClient.map._xmax = data.initialExtent.xmax;
             mapClient.map._ymax = data.initialExtent.ymax;
 
-            esriMap.addLayer(new my.LocalTiledMapServiceLayer(102100, mapClient.map._xmin, mapClient.map._ymin, mapClient.map._xmax, mapClient.map._ymax, 256, 256, 96, "JPEG", 75, -20037508.342787, 20037508.342787, [{
+            mapClient.esriMap.addLayer(new my.LocalTiledMapServiceLayer(102100, mapClient.map._xmin, mapClient.map._ymin, mapClient.map._xmax, mapClient.map._ymax, 256, 256, 96, "JPEG", 75, -20037508.342787, 20037508.342787, [{
               "level": 0,
               "resolution": 156543.033928,
               "scale": 591657527.591555
@@ -373,9 +359,9 @@
       if (typeof(IDENTIFY_QUERYABLE_LAYERS) !== "undefined" && IDENTIFY_QUERYABLE_LAYERS && IDENTIFY_QUERYABLE_LAYERS.length > 0) {
         mapClient.map.mapClickHandle = dojo.connect(mapClient.map.map, "onClick", mapClient.map.onMapClick);
       }
-      esriMap.on("update-start", mapClient.ui.loading.show);
-      esriMap.on("update-end", mapClient.ui.loading.show);
-      esriMap.on("extent-change", function(evt) {
+      mapClient.esriMap.on("update-start", mapClient.ui.loading.show);
+      mapClient.esriMap.on("update-end", mapClient.ui.loading.show);
+      mapClient.esriMap.on("extent-change", function(evt) {
         events.trigger(events.MAP.EXTENT_CHANGE, evt.extent);
       });
     });
@@ -386,7 +372,7 @@
     // Legend
     dojo.connect(mapClient.map.map, "onLayersAddResult", function() {
       mapClient.map.legend = new esri.dijit.Legend({
-          map: esriMap,
+          map: mapClient.esriMap,
           layerInfos: [{
             layer: mapClient.layers.dynamicLayer
           }]
@@ -398,7 +384,7 @@
 
     // Scale bar
     new esri.dijit.Scalebar({
-      map: esriMap,
+      map: mapClient.esriMap,
       attachTo: "bottom-right",
       scalebarUnit: "metric"
     });
@@ -406,7 +392,7 @@
 
   function hideHighLightFeature() {
     if (mapClient.map.highlightLayer !== null) {
-      esriMap.removeLayer(mapClient.map.highlightLayer);
+      mapClient.esriMap.removeLayer(mapClient.map.highlightLayer);
       mapClient.map.highlightLayer = null;
     }
   }
@@ -428,7 +414,7 @@
     mapClient.map.hideHighLightFeature(feature);
 
     mapClient.map.highlightLayer = new esri.layers.GraphicsLayer();
-    esriMap.addLayer(mapClient.map.highlightLayer);
+    mapClient.esriMap.addLayer(mapClient.map.highlightLayer);
 
     // Add feature to layer
     mapClient.map.highlightLayer.add(feature.setSymbol(symbol));
@@ -443,7 +429,7 @@
 
     // Graphics layer
     mapClient.map.highlightPointLayer = new esri.layers.GraphicsLayer();
-    esriMap.addLayer(mapClient.map.highlightPointLayer);
+    mapClient.esriMap.addLayer(mapClient.map.highlightPointLayer);
 
     // Add feature to layer
     mapClient.map.highlightPointLayer.add(feature.setSymbol(symbol));
@@ -482,10 +468,10 @@
       }
 
       identifyParams.layerOption = esri.tasks.IdentifyParameters.LAYER_OPTION_VISIBLE;
-      identifyParams.width = esriMap.width;
-      identifyParams.height = esriMap.height;
+      identifyParams.width = mapClient.esriMap.width;
+      identifyParams.height = mapClient.esriMap.height;
       identifyParams.geometry = evt.mapPoint;
-      identifyParams.mapExtent = esriMap.extent;
+      identifyParams.mapExtent = mapClient.esriMap.extent;
 
       var deferred = identifyTask.execute(identifyParams).addCallback(function(response) {
         // response is an array of identify result objects
@@ -520,8 +506,8 @@
       // above is not an array of features, then you need to add a callback
       // like the one above to post-process the response and return an
       // array of features.
-      esriMap.infoWindow.setFeatures([deferred]);
-      esriMap.infoWindow.show(evt.mapPoint);
+      mapClient.esriMap.infoWindow.setFeatures([deferred]);
+      mapClient.esriMap.infoWindow.show(evt.mapPoint);
     } else {
       var alertMsg = "Configuration Missing" +
         "\n" +
@@ -539,18 +525,18 @@
 
   function enableUserNavigation(enable) {
     if (enable) {
-      esriMap.enableMapNavigation();
-      esriMap.enablePan();
+      mapClient.esriMap.enableMapNavigation();
+      mapClient.esriMap.enablePan();
       // Map.map.showZoomSlider();
     } else {
-      esriMap.disableMapNavigation();
-      esriMap.disablePan();
+      mapClient.esriMap.disableMapNavigation();
+      mapClient.esriMap.disablePan();
       //  Map.map.hideZoomSlider();
     }
   }
 
   function zoomToLayerExtent(layer) {
-    esriMap.setExtent(layer.fullExtent);
+    mapClient.esriMap.setExtent(layer.fullExtent);
   }
 
   function zoomTo(featureSet, highlightFeature) {
@@ -562,9 +548,9 @@
         var pt = featureSet.features[0].geometry;
         var factor = 0.000001;
         var extent = new esri.geometry.Extent(pt.x - factor, pt.y - factor, pt.x + factor, pt.y + factor, pt.spatialReference);
-        esriMap.setExtent(extent);
+        mapClient.esriMap.setExtent(extent);
       } else {
-        esriMap.setExtent(featureSet.features[0].geometry.getExtent());
+        mapClient.esriMap.setExtent(featureSet.features[0].geometry.getExtent());
 
         if (highlightFeature) {
           mapClient.map.highlightFeature(featureSet.features[0]);
@@ -581,7 +567,7 @@
       if (values.length !== 4)
         return;
 
-      mapExtent = {
+      config.MAP.EXTENT = {
         "xmin": parseFloat(values[0]),
         "ymin": parseFloat(values[1]),
         "xmax": parseFloat(values[2]),
@@ -592,11 +578,11 @@
 
   function zoomToExtent(layerType, layerCode, highlightFeature, callback) {
     console.log("zoomToExtent");
-    if (layersExtentTypeCode[layerType]) {
-      var configLayersExtentTypeCode = layersExtentTypeCode[layerType];
-      var layerId = configLayersExtentTypeCode.id;
-      var queryField = configLayersExtentTypeCode.field;
-      var outFields = configLayersExtentTypeCode.outFields;
+    if (config.LAYERS.EXTENT_TYPE_CODE[layerType]) {
+      var layer = config.LAYERS.EXTENT_TYPE_CODE[layerType];
+      var layerId = layer.id;
+      var queryField = layer.field;
+      var outFields = layer.outFields;
 
       // Set the query
       var queryTask = new esri.tasks.QueryTask(mapClient.services.mapServiceURL + "/" + layerId);
@@ -618,11 +604,11 @@
 
   function zoomToExtentUsingSearchField(layerType, layerCode, highlightFeature, callback) {
     console.log("zoomToExtentUsingSearchField");
-    if (layersExtentTypeCode[layerType]) {
-      var configLayersExtentTypeCode = layersExtentTypeCode[layerType];
-      var layerId = configLayersExtentTypeCode.id;
-      var queryField = configLayersExtentTypeCode.searchField;
-      var outFields = configLayersExtentTypeCode.outFields;
+    if (config.LAYERS.EXTENT_TYPE_CODE[layerType]) {
+      var layer = config.LAYERS.EXTENT_TYPE_CODE[layerType];
+      var layerId = layer.id;
+      var queryField = layer.searchField;
+      var outFields = layer.outFields;
       // Set the query
       var queryTask = new esri.tasks.QueryTask(mapClient.services.mapServiceURL + "/" + layerId);
       var query = new esri.tasks.Query();

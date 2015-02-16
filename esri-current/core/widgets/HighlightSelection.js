@@ -6,7 +6,7 @@
 * This class is used to let the user chose if he wants to highlight the selection or not
 */
 define(
-  ["dojo/_base/declare", "modules/_BaseWidget",
+  ["dojo/_base/declare", "widgets/_BaseWidget",
   "esri/layers/GraphicsLayer",
   "esri/renderers/SimpleRenderer",
   "esri/graphic",

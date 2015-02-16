@@ -2,35 +2,33 @@
   'use strict';
 
   // private variables
-  var _scripts = [];
-  var _styles = [];
+  var _filesToLoad;
   var _callback;
 
   // public methods
   utils.loadFiles = {
-    load: load,
+    load: load
   };
 
   ////////////////
 
   function load(scripts, styles, callback) {
-    _scripts = _scripts.concat(scripts);
-    _styles = _styles.concat(styles);
+    _filesToLoad = scripts.length + styles.length;
     _callback = callback;
 
-    if ((_scripts.length === 0) && (_styles.length === 0)) {
+    if (!_filesToLoad) {
       _callback();
       return;
     }
 
-    while (_scripts.length > 0) {
-      var script = _scripts.shift();
+    while (scripts.length > 0) {
+      var script = scripts.shift();
       console.log(script);
       loadScript(script);
     }
 
-    while (_styles.length > 0) {
-      var style = _styles.shift();
+    while (styles.length > 0) {
+      var style = styles.shift();
       console.log(style);
       loadStyleSheet(style);
     }
@@ -44,7 +42,6 @@
     script.src = url;
 
     script.onload = onFileLoaded;
-
     head.appendChild(script);
   }
 
@@ -64,7 +61,8 @@
    * Called when a script is correctly loaded
    **/
   function onFileLoaded() {
-    if ((_scripts.length === 0) && (_styles.length === 0)) {
+    _filesToLoad--;
+    if (!_filesToLoad) {
       _callback();
     }
   }

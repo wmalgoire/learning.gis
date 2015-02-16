@@ -6,7 +6,7 @@
 * This class is used to let the user browser for campaign. This will refresh the mapservice with a querydefinition filtering for the given campaign
 */
 define(
-  ["dojo/_base/declare", "modules/_BaseWidget"],
+  ["dojo/_base/declare", "widgets/_BaseWidget"],
 
   function (declare, BaseWidget) {
 

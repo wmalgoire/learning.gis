@@ -1,6 +1,6 @@
 /**
  * Main application's entry point.
- * @namespace novelt.mapClient.esri
+ * @namespace novelt.mapClient
  */
 (function(mapClient, utils, events, config) {
   'use strict';
@@ -13,50 +13,28 @@
 
   ////////////////
 
-  function initializeDojo() {
-    dojo.require("dijit.layout.BorderContainer");
-    dojo.require("dijit.layout.ContentPane");
-    dojo.require("dijit.layout.TabContainer");
-    dojo.require("dijit.ProgressBar");
-    dojo.require("dijit.form.HorizontalSlider");
-    dojo.require("esri.dijit.Scalebar");
-    dojo.require("esri.dijit.Legend");
-    dojo.require("esri.map");
-  }
-
   function onDomReady() {
-    initializeDojo();
-
-    require(['modules/_ModuleManager'],
-      function(ModuleManager) {
-        mapClient.moduleManager = new ModuleManager();
-      });
-
-    require(['esri/config'],
-      function(esriConfig) {
-        if (!config.IS_ONLINE) {
+    if (!config.IS_ONLINE) {
+      require(['esri/config'],
+        function(esriConfig) {
           esriConfig.defaults.io.proxyUrl = config.APIS.PROXY;
           esriConfig.defaults.io.alwaysUseProxy = true;
           createLocalTiledMapServiceLayer();
-        }
-      });
+        });
+    }
 
     mapClient.config.initialize();
     mapClient.ui.initialize();
-
-    //todo: promise
     loadFiles(onApplicationReady);
+    events.trigger(events.APP.INITIALIZED);
   }
 
   function onApplicationReady() {
-
-    // if (!mapClient.map.ignoreAddMap) {
-    //   mapClient.map.addMap();
-    // }
-
     mapClient.map.extent.setExtent();
-    mapClient.map.addMap();
-    events.trigger(events.APP.INITIALIZED);
+    if (!mapClient.map.ignoreAddMap) {
+      mapClient.map.addMap();
+    }
+    events.trigger(events.APP.READY);
   }
 
   function loadFiles(callback) {
